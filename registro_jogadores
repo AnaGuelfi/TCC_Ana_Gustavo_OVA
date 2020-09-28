@@ -1,0 +1,25 @@
+<?php
+	
+		$arquivo = "contador.txt";
+	
+		$handle = fopen($arquivo, 'r+');
+		
+		$data = fread($handle, 512);
+		
+		$contador = $data;
+		if ($contador<5) {
+			
+			// jogadores podem entrar na sala
+			
+			$contador = $contador + 1;
+		} else {
+			echo '<p>Número máximo de jogadores atingido!</p>';
+		}
+		
+		fseek($handle, 0);
+		
+		fwrite($handle, $contador);
+		
+		fclose($handle);
+
+	?>
