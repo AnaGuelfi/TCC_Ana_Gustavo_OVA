@@ -1,20 +1,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-	
+
 	<?php
-	
+/*
 		if(file_exists("participantes.txt")){
 			$arquivo = fopen("participantes.txt", "r");
 			$participantes = chop(fgets($arquivo));
 			fclose($arquivo);
 		}
-	
+
 		if($participantes>=5){
 			header('Location: sala_cheia.html');
 		}
-	
+*/
 	?>
-	
+
 <head>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -47,15 +47,9 @@
         var chat =  new Chat();
 		// criar função que retorna se a sala está cheia ou não
 		var x = chat.sala();
-		// passar o valor do participantes.txt através do hidden. se a sala estiver vazia, chama o register, caso contrário, redireciona o jogador.
-		window.alert($('input#participantes').val());
+		
 		chat.register(user);
-		// var participantes = ("input[name='participantes']").val();
-        // if (participantes<5){
-			// chat.register(user);
-		// } else {
-			 // window.location.href='http://localhost/chat-ana/sala_cheia.html';
-		// }
+		
     	$(function() {
 
     		 chat.getState();
@@ -107,7 +101,7 @@
 
 </head>
 
-<body onload="setInterval('chat.update()', 1000); setInterval('chat.turn()', 1000)">
+<body onload="setInterval('chat.update()', 1000); setInterval('chat.turn(user.id)', 1000)">
 
     <div id="page-wrap">
 
@@ -121,11 +115,11 @@
             <p>Your message: </p>
             <textarea id="sendie" maxlength = '100' ></textarea>
         </form>
-		
+
 		<br />
 		<br />
-		
-        <h3 class="userData">Usuário: </h3>
+
+        <h3 class="userData">Mensagem: </h3><br />
 		<h3 class="teste">Usuário: </h3>
     </div>
 

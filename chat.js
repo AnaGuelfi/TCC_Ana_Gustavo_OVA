@@ -8,6 +8,7 @@ var instanse = false;
 var state;
 var mes;
 var file;
+var id;
 
 function Chat () {
     this.update = updateChat;
@@ -90,7 +91,7 @@ function sendChat(message, nickname)
 }
 
 //registra usuário
-//Ana tera a missão de passar o objeto para o process.
+
 function registerUser(user)
 {
      $.ajax({
@@ -112,7 +113,7 @@ function registerUser(user)
 		});
 }
 
-function getTurn()
+function getTurn(u)
 {
      $.ajax({
 		   type: "POST",
@@ -123,8 +124,14 @@ function getTurn()
 				 },
 		   dataType: "json",
 		   success: function(log){
-         $('.userData').append(log['text']);
-         console.log('log', log);
+			 if(id == log['jogadoratual']){
+				$('.userData').append("Vez deste infeliz!");
+				$('.teste').append(log['jogadoratual']);
+			 }else{
+			   $('.userData').append("Espera ai...");
+			   $('.teste').append(log['jogadoratual']);
+			 }
+
 			   // updateChat();
 		   },
 		});
@@ -145,7 +152,7 @@ function sala_cheia()
 				 },
 		   dataType: "json",
 		   success: function(log){
-				alert(teste());
+				//alert(teste());
 		   },
 		});
 }
