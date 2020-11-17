@@ -1,111 +1,98 @@
 <?php
-    $num_jogadores = 4;
+    $num_jogadores = 3;
     $function = $_POST['function'];
 
     $log = array();
 
     switch($function) {
-    	 case('getState'):
-        	 if(file_exists('chat.txt')){
-               $lines = file('chat.txt');
-        	 }
-             $log['state'] = count($lines);
-        	 break;
 
-    	 case('update'):
-        	$state = $_POST['state'];
-        	if(file_exists('chat.txt')){
-        	   $lines = file('chat.txt');
-        	 }
-        	 $count =  count($lines);
-        	 if($state == $count){
-        		 $log['state'] = $state;
-        		 $log['text'] = false;
+		case('mt'):
+			//recebe a jogada via post e executa a logica
+			$idj = $_POST['turn_id'];
+			$jogador_escolhido = $_POST['jogador_escolhido'];
 
-        		 }
-        		 else{
-        			 $text= array();
-        			 $log['state'] = $state + count($lines) - $state;
-        			 foreach ($lines as $line_num => $line)
-                       {
-        				   if($line_num >= $state){
-                         $text[] =  $line = str_replace("\n", "", $line);
-        				   }
-                      }
-        			 $log['text'] = $text;
-        		 }
+			$jogo = json_decode(file_get_contents('jogo.json'));
+			$jogadores = $jogo->jogadores;
+			//lógica
+			//$jogo->jogadores[$jogo->vez]->papel;
 
-             break;
+			// foreach ( $jogadores as $j ){
+			// 	if ($j == $jogador_escolhido){
+			// 		unset($j);
+			// 	}
+			// }
 
-    	 case('send'):
-		  $nickname = htmlentities(strip_tags($_POST['nickname']));
-			 $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
-			  $message = htmlentities(strip_tags($_POST['message']));
-		 if(($message) != "\n"){
+			if($jogo->jogadores[$jogo->vez]->id == $idj){
+				if($jogo->vez != ($num_jogadores - 1)){
 
-			 if(preg_match($reg_exUrl, $message, $url)) {
-       			$message = preg_replace($reg_exUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $message);
+					$jogo->vez = $jogo->vez + 1;
+          //remove
+          //$jogo->jogadores = array_splice($jogadores ,(count($jogadores)-1),1);
+				}else{
+					$jogo->vez = 0;
+					$jogo->turno = $jogo->turno+1;
 				}
-        	 fwrite(fopen('chat.txt', 'a'), "<span>". $nickname . "</span>" . $message = str_replace("\n", " ", $message) . "\n");
-		 }
+				$jogoJSON = json_encode($jogo);
+				file_put_contents("jogo.json", $jogoJSON, LOCK_EX);
+			}
 
+			$log = $jogador_escolhido;
 
-     break;
+        break;
 
-      case('register'):
-      //registra o arquivo do jogo
-      if(!file_exists("jogo.json")){
-        $jogo->jogadores = array();
-        $jogo->vez = -1;
-        $jogo->turno = -1;
-        $jogo->inicio = 0;//0 não iniciado - 1 iniciado
-        $jogoJSON = json_encode($jogo);
-        file_put_contents("jogo.json", $jogoJSON);
-      }
+		case('register'):
+			//registra o arquivo do jogo
+			if(!file_exists("jogo.json")){
+				$jogo->jogadores = array();
+				$jogo->vez = -1;
+				$jogo->turno = -1;
+				$jogo->inicio = 0;//0 não iniciado - 1 iniciado
+				$jogoJSON = json_encode($jogo);
+				file_put_contents("jogo.json", $jogoJSON, LOCK_EX);
+			}
 
-      //verifica se o numero de jogadores é menor do que o esperado
-      //numero de jogadores é contado pelo o array
+			//verifica se o numero de jogadores é menor do que o esperado
+			//numero de jogadores é contado pelo o array
 			$jogo = json_decode(file_get_contents('jogo.json'));
 			if (count($jogo->jogadores)<$num_jogadores) {
 				// se tiver espaço na sala, registra o jogador
 				$jogador->id = $_POST['id'];
 				$jogador->nome = $_POST['user'];
+			//$jogador->vivo = 'S'
 				array_push($jogo->jogadores, $jogador);
 				$jogoJSON = json_encode($jogo);
-				file_put_contents("jogo.json", $jogoJSON);
+				file_put_contents("jogo.json", $jogoJSON, LOCK_EX);
 			}
 
-      //se numero de jogadores igual ao esperado inicia o jogo
-		  if (count($jogo->jogadores)==$num_jogadores) {
-			//$jogo = json_decode(file_get_contents('jogo.json'));
-			shuffle($jogo->jogadores);
-			$jogo->vez = 1;
-			$jogo->turno = 1;
-			$jogo->inicio = 1;
-			$jogoJSON = json_encode($jogo);
-			file_put_contents("jogo.json", $jogoJSON);
-		  }
+			//se numero de jogadores igual ao esperado inicia o jogo
+			if (count($jogo->jogadores)==$num_jogadores) {
+				
+				shuffle($jogo->jogadores);
+				
+				$papel = json_decode(file_get_contents('papeis.json'));
+				$personagens = $papel->personagens;
+				shuffle($personagens);
+				for($i=0;$i<count($jogo->jogadores);$i++) {
+				  $jogo->jogadores[$i]->papel = $personagens[$i]->nome;
+				}
+				$jogo->vez = 1;
+				$jogo->turno = 1;
+				$jogo->inicio = 1;
+				$jogoJSON = json_encode($jogo);
+				file_put_contents("jogo.json", $jogoJSON, LOCK_EX);
+			}
 
-      break;
+			$log = $_POST['user'];
 
-		 case('sala_cheia'):
-			$log = "V";
-		 break;
+		break;
 
-     case('getTurn'):
-      $jogo = json_decode(file_get_contents('jogo.json'));
-      $jogo->jogadoratual = $jogo->jogadores[$jogo->vez]->id;
-     //  if ($jogo->inicio == 0){
-     //   $log['text']="Aguardando para iniciar o jogo - " . count($jogo->jogadores) . "/4 participantes";
-     // }else{
-     //   $jogador = $jogo->jogadores[$jogo->vez];
-     //   $log['text']="Jogo iniciado é a vez de ". $jogador->nome . " | ".$jogador->id;
-     // }
+		case('getTurn'):
+			$jogo = json_decode(file_get_contents('jogo.json'));
+			$jogo->jogadoratual = $jogo->jogadores[$jogo->vez]->id;
+			$log = $jogo;
+		break;
 
-      $log = $jogo;
-      break;
     }
-
 
     echo json_encode($log);
 
