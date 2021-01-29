@@ -1,0 +1,74 @@
+body{
+	background-color: #ADD8E6;
+}
+
+div.container {
+	font-size: 18px;
+}
+
+div.usuario {
+	text-align: left;
+}
+
+.paragrafo{
+	font-size: 20px;
+}
+
+.paragrafo{
+	background-color: #FFF;
+	width: 300px;
+}
+
+.jogo {
+	background-color: #ADD8E6;
+}
+
+.vez {
+	color: #006400;
+	font-size: 20px;
+}
+.aguarde {
+	color: #808000;
+	font-size: 20px;
+}
+.eliminado {
+	color: #808000;
+	font-size: 20px;
+}
+.final {
+	color: #FF1493;
+	font-size: 22px;
+}
+
+.msg_php {
+	color: #1C1C1C;
+	font-size: 20px;
+}
+
+
+.curiosidade {
+	color: #0000CD;
+	font-size: 22px;
+}
+
+.identidade{
+	font-size: 22px;
+}
+
+#jogo {
+	text-align: center;
+}
+
+#bt{
+	width: 80px;
+	background-color: DimGray;
+	color: black;
+	font-weight: bold;
+	border: none;
+}
+
+input, select{
+    width: 150px;
+	border-radius: 5px;
+	border-color: #ADD8E6;
+}

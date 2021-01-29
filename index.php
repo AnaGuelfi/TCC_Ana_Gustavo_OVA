@@ -1,101 +1,52 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<!DOCTYPE html>
+<html lang="pt-BR">
 	<head>
-
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
-		<title>Chat</title>
-
-		<link rel="stylesheet" href="style.css" type="text/css" />
-
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-		<script type="text/javascript" src="chat.js"></script>
-		<script type="text/javascript">
-
-			var user = new Object();
-
-			// Nome do usuário:
-			user.name = prompt("Enter your chat name:", "Guest");
-			user.id = Date.now();
-			console.log("ID: " + user.id);
-
-			// Nome padrão para o usuário ('Guest')
-			if (!user.name || user.name === ' ') {
-				user.name = "Guest";
-			}
-
-			// strip tags
-			user.name = user.name.replace(/(<([^>]+)>)/ig,"");
-
-			// Recursos visuais da página
-			$("#name-area").html("You are: <span>" + user.name + "</span>");
-			$(".Usuario").html("Usuário: <span>" + user.name + "</span>");
-
-			// Funções do jogo
-			var chat =  new Chat();
-
-			chat.register(user);
-
-			$(function() {
-				$("#ptsendie").click(function() {
-					chat.mut(user.id);
-				});
-			});
-
-		</script>
-
+		<meta charset="utf-8">
+		<title>Página Inicial</title>
+		
+		<link rel="sortcut icon" href="logo.gif" type="image/gif" />
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script><script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+		<link rel = "stylesheet" href = "css/bootstrap.min.css" />
+		<link rel = "stylesheet" href = "estilos.css" />
+		<script src = "js/jquery-3.4.1.min.js"></script>
+	
 	</head>
-
-	<body onload="setInterval('chat.turn(user)', 1000)">
-
-		<div id="page-wrap">
-
-			<h2>Jogo</h2>
-
-			<div class="status"></div>
-
-				<form id="send-btn-area">
-					<div id = "formulario"></div>
-					<?php
-
-
-/*
-						$arquivo = 'jogo.json';
-
-						if (file_exists($arquivo)) {
-							$jogo = json_decode(file_get_contents('jogo.json'));
-							$jogadores = $jogo->jogadores;
-							echo '<select name = "jogador_escolhido">
-									<option value = "x" checked = "checked">Selecione um jogador</option>';
-							foreach ( $jogadores as $j ){
-								echo "<option value = '$j->id'>$j->nome</option>";
-							}
-							echo '</select>';
-						}
-*/
-					?>
-
-					<br />
-					<br />
-
-					<button type="button" name="pt" id="ptsendie">Enviar</button>
-
-				</form>
-
-				<div id = "mensagem"></div>
-
-			<br />
-			<br />
-
-			<h2 class="usuario" class="teste">Usuário: </h2>
-
-			<br />
-
-			<h3 class="userData"></h3>
-
+	<body>
+		
+		<ul class="nav justify-content-center bg-secondary">
+			<li class="nav-item">
+				<a class="nav-link text-dark font-weight-bold h5" href="index.php">Página Inicial</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link text-dark font-weight-bold h5" href="tutorial.php">Tutorial</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link text-dark font-weight-bold h5" href="sobre.php">Sobre</a>
+			</li>
+		</ul>
+		
+		<br />
+		<br />
+		<br />
+		
+		<div class="container w-75 bg-light" id = "historia" align = "center">
+			<p class = "text-justify">Em uma pequena cidadezinha, vive uma comunidade de cientistas dedicados ao cuidado e desenvolvimento de sua cidade, responsáveis por inúmeras invenções e pesquisas. Entretanto, eles não previram que suas descobertas seriam usadas para construção de grandes fábricas, que, consequentemente, geraram uma enorme poluição. <strong>Nos gases emitidos pelas fábricas, são liberados para a atmosfera óxidos de enxofre (SO₂ e SO₃) e óxidos de nitrogênio (NO₂), os quais reagem com o vapor de água produzindo ácido sulfúrico (H₂SO₄) e ácido nítrico (HNO₃). Esses ácidos, quando  diluídos na água da chuva, dão origem à chuva ácida, com pH ácido.</strong> A cidade possui poucos patrimônios, incluindo as estátuas dos dois fundadores da cidade, José de Souza e Maria da Silva, feitas de carbonato de cálcio (CaCO₃), localizadas na praça central. Agora, cabe aos cientistas protegerem as estátuas, descobrindo quem é o ácido, através de testes com papel indicador, para impedi-lo antes que ele destrua os dois maiores símbolos desta cidade.<br />Dentro desse contexto, se divirta com seus amigos para aprender um pouco mais sobre a chuva ácida e a teoria Ácido-Base!</p>
 		</div>
-
+		
+		<br />
+		
+		<div class = "formulario" align = "center">
+		
+			<form action = "jogo.php" method = "get">
+			
+				<p class = "paragrafo"><strong>Crie ou encontre uma sala: </strong></p>
+				<input type = "text" name = "nome_sala" placeholder = "Digite aqui..."/>
+				<br />
+				<br />
+				<input type = "submit" id = "bt" class="btn btn-primary" onclick="location.href = 'jogo.php';" id="myButton" value = "Iniciar" />
+			
+			</form>
+		
+		</div>
 	</body>
-
 </html>
